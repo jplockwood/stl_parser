@@ -23,16 +23,47 @@ Please check .tools-versions for the expected Elixir and Erlang versions. This p
 
 ## Running the Code
 I didn't write a command line or web interface for this solution, but I tested the module using ExUnit. The main test module is StlParserTest, which tests both the simple and mood stl examples. To test the solution run the following at the command line:
-```bash
+```shell script
 $ mix test
 ```
 To verify test coverage, execute the following:
-```bash
+```shell script
 $ mix coveralls
 ```
 To run the linter, execute the following:
-```bash
+```shell script
 $ mix credo
+```
+Alternatively, one can run the project in interactive mode:
+```shell script
+$ iex -S mix
+```
+```elixir
+iex> file_path = "/...full-path.../priv/samples/simplePart.stl"
+"/...full-path.../priv/samples/simplePart.stl"
+iex> {:ok, _result} = StlParser.parse(file_path)
+{:ok,
+ %{
+   number_of_triangles: 2,
+   solid: %StlParser.Solid{
+     facets: [
+       %StlParser.Facet{
+         normal: %StlParser.Math.Point{x: 0.0, y: 0.0, z: 0.0},
+         vert1: %StlParser.Math.Point{x: 0.0, y: 0.0, z: 0.0},
+         vert2: %StlParser.Math.Point{x: 1.0, y: 0.0, z: 0.0},
+         vert3: %StlParser.Math.Point{x: 1.0, y: 1.0, z: 1.0}
+       },
+       %StlParser.Facet{
+         normal: %StlParser.Math.Point{x: 0.0, y: 0.0, z: 0.0},
+         vert1: %StlParser.Math.Point{x: 0.0, y: 0.0, z: 0.0},
+         vert2: %StlParser.Math.Point{x: 0.0, y: 1.0, z: 1.0},
+         vert3: %StlParser.Math.Point{x: 1.0, y: 1.0, z: 1.0}
+       }
+     ],
+     name: "simplePart"
+   },
+   surface_area: 1.4142135623730956
+ }}
 ```
 ## Design Decisions
 I have never worked with 3D graphics before and my math skills are a bit rusty. This was a fun problem.
