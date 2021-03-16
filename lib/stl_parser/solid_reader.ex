@@ -28,22 +28,15 @@ defmodule StlParser.SolidReader do
   end
 
   defp read_facet(file) do
-    facet =
-      file
-      |> IO.read(:line)
+    facet = IO.read(file, :line)
 
     if String.match?(facet, ~r/.*endsolid.*/) do
       {:ok, :end_solid}
     else
-      facet_start_point =
-        Regex.named_captures(
-          ~r/facet normal (?<x>[+-]?([0-9]*[.])?[0-9]+) (?<y>[+-]?([0-9]*[.])?[0-9]+) (?<z>[+-]?([0-9]*[.])?[0-9]+)\n/,
-          facet
-        )
-
-      {x, _} = Float.parse(facet_start_point["x"])
-      {y, _} = Float.parse(facet_start_point["y"])
-      {z, _} = Float.parse(facet_start_point["z"])
+      {:ok, normal} =
+        ~r/facet normal (?<x>[+-]?([0-9]*[.])?[0-9]+) (?<y>[+-]?([0-9]*[.])?[0-9]+) (?<z>[+-]?([0-9]*[.])?[0-9]+)\n/
+        |> Regex.named_captures(facet)
+        |> create_point()
 
       :ok = check_line(file, "outer loop")
       {:ok, v1} = read_vertex(file)
@@ -52,28 +45,23 @@ defmodule StlParser.SolidReader do
       :ok = check_line(file, "endloop")
       :ok = check_line(file, "endfacet")
 
-      normal = Point.new(x, y, z)
       {:ok, Facet.new(normal, v1, v2, v3)}
     end
   end
 
-  defp read_vertex(file) do
-    vert =
-      file
-      |> IO.read(:line)
+  defp read_vertex(file), do:
+    ~r/.*vertex (?<x>[+-]?([0-9]*[.])?[0-9]+) (?<y>[+-]?([0-9]*[.])?[0-9]+) (?<z>[+-]?([0-9]*[.])?[0-9]+)\n/
+    |> Regex.named_captures(IO.read(file, :line))
+    |> create_point()
 
-    facet_start_point =
-      Regex.named_captures(
-        ~r/.*vertex (?<x>[+-]?([0-9]*[.])?[0-9]+) (?<y>[+-]?([0-9]*[.])?[0-9]+) (?<z>[+-]?([0-9]*[.])?[0-9]+)\n/,
-        vert
+  defp create_point(point_info),
+    do:
+      with(
+        {x, _} <- Float.parse(point_info["x"]),
+        {y, _} <- Float.parse(point_info["y"]),
+        {z, _} <- Float.parse(point_info["z"]),
+        do: {:ok, Point.new(x, y, z)}
       )
-
-    {x, _} = Float.parse(facet_start_point["x"])
-    {y, _} = Float.parse(facet_start_point["y"])
-    {z, _} = Float.parse(facet_start_point["z"])
-
-    {:ok, Point.new(x, y, z)}
-  end
 
   def check_line(file, partial_match) do
     line = IO.read(file, :line)
