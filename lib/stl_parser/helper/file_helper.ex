@@ -1,4 +1,4 @@
-defmodule StlParser.FileHelper do
+defmodule StlParser.Helper.FileHelper do
   @moduledoc false
 
   @empty_sample "priv/samples/empty.stl"

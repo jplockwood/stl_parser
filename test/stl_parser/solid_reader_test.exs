@@ -1,7 +1,7 @@
 defmodule StlParser.SolidReaderTest do
   use ExUnit.Case
 
-  alias StlParser.{FileHelper, SolidReader}
+  alias StlParser.{Helper.FileHelper, SolidReader}
 
   @moduletag :capture_log
 

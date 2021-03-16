@@ -1,12 +1,13 @@
 defmodule StlParserTest do
   use ExUnit.Case
   doctest StlParser
-  alias StlParser.FileHelper
+  alias StlParser.Helper.FileHelper
 
   test "simple part" do
     file_path = FileHelper.simple_part_sample()
 
-    {:ok, %{number_of_triangles: number_of_triangles, surface_area: surface_area, solid: _}} =
+    {:ok,
+     %{number_of_triangles: number_of_triangles, surface_area: surface_area, name: "simplePart"}} =
       StlParser.parse(file_path)
 
     assert number_of_triangles == 2
@@ -16,7 +17,7 @@ defmodule StlParserTest do
   test "moon part" do
     file_path = FileHelper.moon_sample()
 
-    {:ok, %{number_of_triangles: number_of_triangles, surface_area: surface_area, solid: _}} =
+    {:ok, %{number_of_triangles: number_of_triangles, surface_area: surface_area, name: "Moon"}} =
       StlParser.parse(file_path)
 
     assert number_of_triangles == 116
