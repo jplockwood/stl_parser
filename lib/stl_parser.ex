@@ -17,6 +17,7 @@ defmodule StlParser do
       iex> {:ok, %{number_of_triangles: number_of_triangles, surface_area: surface_area, solid: solid}} = StlParser.parse(file_path)
       iex> assert number_of_triangles == 2
       iex> assert surface_area == 1.4142135623730956
+      iex> assert solid
   """
   def parse(nil), do: {:error, :contents_not_found}
 

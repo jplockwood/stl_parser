@@ -13,10 +13,11 @@ defmodule StlParser.Math.Triangle do
   @doc """
   Calculates triangle area using 3 3D vertices
   """
-  def area(%{vert1: %Point{} = vert1, vert2: %Point{} = vert2, vert3: %Point{} = vert3}) do
-    a = Point.distance(vert1, vert2)
-    b = Point.distance(vert2, vert3)
-    c = Point.distance(vert3, vert1)
-    heron(a, b, c)
-  end
+  def area(%{vert1: %Point{} = vert1, vert2: %Point{} = vert2, vert3: %Point{} = vert3}),
+    do:
+      heron(
+        Point.distance(vert1, vert2),
+        Point.distance(vert2, vert3),
+        Point.distance(vert3, vert1)
+      )
 end

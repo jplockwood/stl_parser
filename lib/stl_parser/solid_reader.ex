@@ -45,12 +45,12 @@ defmodule StlParser.SolidReader do
       {y, _} = Float.parse(facet_start_point["y"])
       {z, _} = Float.parse(facet_start_point["z"])
 
-      skip_line(file) # outer loop
+      :ok = check_line(file, "outer loop")
       {:ok, v1} = read_vertex(file)
       {:ok, v2} = read_vertex(file)
       {:ok, v3} = read_vertex(file)
-      skip_line(file) # endloop
-      skip_line(file) # endfacet
+      :ok = check_line(file, "endloop")
+      :ok = check_line(file, "endfacet")
 
       {:ok, Point.new(x, y, z) |> Facet.new(v1, v2, v3)}
     end
@@ -74,7 +74,15 @@ defmodule StlParser.SolidReader do
     {:ok, Point.new(x, y, z)}
   end
 
-  defp skip_line(file), do: IO.read(file, :line)
+  def check_line(file, partial_match) do
+    line = IO.read(file, :line)
+
+    if line =~ partial_match do
+      :ok
+    else
+      {:error, :failed_partial_match, [line, partial_match]}
+    end
+  end
 
   defp init_solid(file),
     do: {
