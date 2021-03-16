@@ -1,6 +1,5 @@
 defmodule StlParser.Solid do
   @moduledoc false
-  alias __MODULE__
 
   defstruct [:name, :facets]
 

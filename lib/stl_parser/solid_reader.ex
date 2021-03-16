@@ -52,7 +52,8 @@ defmodule StlParser.SolidReader do
       :ok = check_line(file, "endloop")
       :ok = check_line(file, "endfacet")
 
-      {:ok, Point.new(x, y, z) |> Facet.new(v1, v2, v3)}
+      normal = Point.new(x, y, z)
+      {:ok, Facet.new(normal, v1, v2, v3)}
     end
   end
 

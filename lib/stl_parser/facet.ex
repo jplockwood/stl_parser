@@ -1,6 +1,5 @@
 defmodule StlParser.Facet do
   @moduledoc false
-  alias __MODULE__
   alias StlParser.Math.Point
 
   defstruct [:normal, :vert1, :vert2, :vert3]
