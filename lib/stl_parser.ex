@@ -24,7 +24,7 @@ defmodule StlParser do
     {:ok, %{facets: facets} = solid} = SolidReader.read(file_path)
 
     number_of_triangles = Enum.count(facets)
-    surface_area = Enum.reduce(facets, 0, fn x, acc -> acc + Triangle.calculate_area(x) end)
+    surface_area = Enum.reduce(facets, 0, fn x, acc -> acc + Triangle.area(x) end)
 
     {:ok, %{number_of_triangles: number_of_triangles, surface_area: surface_area, solid: solid}}
   end

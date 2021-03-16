@@ -12,7 +12,7 @@ defmodule StlParser.Math.TriangleTest do
       vert3: Point.new(1, 1, 1)
     }
 
-    area = Triangle.calculate_area(vertices)
+    area = Triangle.area(vertices)
     assert Float.round(area, 4) == 0.7071
   end
 
