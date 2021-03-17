@@ -33,10 +33,7 @@ defmodule StlParser.SolidReader do
     if String.match?(facet, ~r/.*endsolid.*/) do
       {:ok, :end_solid}
     else
-      {:ok, normal} =
-        ~r/facet normal (?<x>[+-]?([0-9]*[.])?[0-9]+) (?<y>[+-]?([0-9]*[.])?[0-9]+) (?<z>[+-]?([0-9]*[.])?[0-9]+)\n/
-        |> Regex.named_captures(facet)
-        |> create_point()
+      {:ok, normal} = read_facet_normal(facet)
 
       :ok = check_line(file, "outer loop")
       {:ok, v1} = read_vertex(file)
@@ -48,6 +45,11 @@ defmodule StlParser.SolidReader do
       {:ok, Facet.new(normal, v1, v2, v3)}
     end
   end
+
+  defp read_facet_normal(facet_line), do:
+    ~r/facet normal (?<x>[+-]?([0-9]*[.])?[0-9]+) (?<y>[+-]?([0-9]*[.])?[0-9]+) (?<z>[+-]?([0-9]*[.])?[0-9]+)\n/
+    |> Regex.named_captures(facet_line)
+    |> create_point()
 
   defp read_vertex(file), do:
     ~r/.*vertex (?<x>[+-]?([0-9]*[.])?[0-9]+) (?<y>[+-]?([0-9]*[.])?[0-9]+) (?<z>[+-]?([0-9]*[.])?[0-9]+)\n/
