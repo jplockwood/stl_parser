@@ -16,4 +16,13 @@ defmodule StlParser.Math.Point do
   """
   def distance(%Point{x: x1, y: y1, z: z1}, %Point{x: x2, y: y2, z: z2}),
     do: :math.sqrt(:math.pow(x1 - x2, 2) + :math.pow(y1 - y2, 2) + :math.pow(z1 - z2, 2))
+
+  def create_point(%{"x" => x, "y" => y, "z" => z}),
+    do:
+      with(
+        {px, _} <- Float.parse(x),
+        {py, _} <- Float.parse(y),
+        {pz, _} <- Float.parse(z),
+        do: {:ok, Point.new(px, py, pz)}
+      )
 end
