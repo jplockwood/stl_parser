@@ -3,7 +3,7 @@ defmodule StlParser.FacetReader do
 
   alias StlParser.{Facet, Math.Point}
 
-  def read(file) do
+  def read(file, solid) do
     facet = IO.read(file, :line)
 
     if String.match?(facet, ~r/.*endsolid.*/) do
@@ -18,9 +18,20 @@ defmodule StlParser.FacetReader do
       :ok = check_line(file, "endloop")
       :ok = check_line(file, "endfacet")
 
-      {:ok, Facet.new(normal, v1, v2, v3)}
+      new_facet = Facet.new(normal, v1, v2, v3)
+
+      if duplicates?(new_facet, solid) == {:ok, true},
+        do: {:error, :duplicate_facet_encountered},
+        else: {:ok, new_facet}
     end
   end
+
+  def duplicates?(facet, solid),
+    do:
+      {:ok,
+       Enum.reduce(solid.facets, false, fn f, acc ->
+         acc || Facet.same?(f, facet) == {:ok, true}
+       end)}
 
   def check_line(file, partial_match) do
     line = IO.read(file, :line)

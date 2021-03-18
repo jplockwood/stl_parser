@@ -31,6 +31,14 @@ defmodule StlParser.SolidReaderTest do
     assert Enum.count(facets) == 116
   end
 
+  test "duplicate" do
+    r =
+      FileHelper.duplicate_sample()
+      |> SolidReader.read()
+
+    assert r == {:error, :duplicate_facet_encountered}
+  end
+
   describe "what to do with empty stl files" do
     test "should return new solid with no facets" do
       {:ok,

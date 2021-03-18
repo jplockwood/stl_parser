@@ -18,12 +18,15 @@ defmodule StlParser.SolidReader do
   end
 
   defp read_facets({:ok, solid, file}) do
-    case FacetReader.read(file) do
+    case FacetReader.read(file, solid) do
       {:ok, :end_solid} ->
         {:ok, solid}
 
       {:ok, %Facet{} = facet} ->
         read_facets({:ok, %{solid | facets: solid.facets ++ [facet]}, file})
+
+      {:error, :duplicate_facet_encountered} ->
+        {:error, :duplicate_facet_encountered}
     end
   end
 

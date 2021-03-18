@@ -9,4 +9,7 @@ defmodule StlParser.Helper.FileHelper do
 
   @moon_sample "priv/samples/moon.stl"
   def moon_sample, do: @moon_sample
+
+  @duplicate_sample "priv/samples/duplicate.stl"
+  def duplicate_sample, do: @duplicate_sample
 end

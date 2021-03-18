@@ -43,10 +43,10 @@ defmodule FacetTest do
     end
 
     test "true when same and in different order 2" do
-#      f1 = Facet.new(nil, 1, 2, 3)
-#      f2 = Facet.new(nil, 3, 1, 2)
-#
-#      assert {:ok, true} = Facet.same?(f1, f2)
+      #      f1 = Facet.new(nil, 1, 2, 3)
+      #      f2 = Facet.new(nil, 3, 1, 2)
+      #
+      #      assert {:ok, true} = Facet.same?(f1, f2)
     end
   end
 end
